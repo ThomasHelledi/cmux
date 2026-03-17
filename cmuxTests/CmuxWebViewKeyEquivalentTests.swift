@@ -2450,6 +2450,24 @@ final class GhosttyBackgroundThemeTests: XCTestCase {
     }
 }
 
+final class MainWindowTitlebarOpacityTests: XCTestCase {
+    func testKeepsTitlebarOpaqueWhenGlassEffectViewIsAvailable() {
+        XCTAssertEqual(
+            cmuxMainWindowTitlebarOpacity(backgroundOpacity: 0.57, glassEffectAvailable: true),
+            1.0,
+            accuracy: 0.0001
+        )
+    }
+
+    func testUsesCompositedOpacityWhenGlassEffectViewIsUnavailable() {
+        XCTAssertEqual(
+            cmuxMainWindowTitlebarOpacity(backgroundOpacity: 0.57, glassEffectAvailable: false),
+            1.0 - pow(1.0 - 0.57, 2),
+            accuracy: 0.0001
+        )
+    }
+}
+
 @MainActor
 final class BrowserInsecureHTTPAlertPresentationTests: XCTestCase {
     private final class BrowserInsecureHTTPAlertSpy: NSAlert {
